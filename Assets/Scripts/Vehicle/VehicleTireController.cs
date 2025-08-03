@@ -72,7 +72,7 @@ namespace Vehicle {
 
             if (ifVehicleIsStillInAir) {
                 _isJumping = true;
-                tireRigidbody2D.velocity = new Vector2(_playerHorizontalJumpSpeed + 100 * Time.deltaTime,
+                tireRigidbody2D.linearVelocity = new Vector2(_playerHorizontalJumpSpeed + 100 * Time.deltaTime,
                     playerParams.jumpHeightAccelerate);
             }
             else {
@@ -106,7 +106,7 @@ namespace Vehicle {
 
         private void MoveForward() {
             if (_isJumping == false)
-                tireRigidbody2D.velocity = new Vector2(_playerSpeed + 100 * Time.deltaTime, _pos);
+                tireRigidbody2D.linearVelocity = new Vector2(_playerSpeed + 100 * Time.deltaTime, _pos);
         }
 
         private void BackToNormalSpeed() {

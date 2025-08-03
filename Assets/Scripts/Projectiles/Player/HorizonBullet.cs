@@ -10,7 +10,7 @@ namespace Projectiles.Player {
         [SerializeField] private ProjectileSpeedSO projectileSpeed;
 
         private void Start() {
-            bulletRigidBody.velocity = new Vector2(projectileSpeed.projectileSpeed, 0);
+            bulletRigidBody.linearVelocity = new Vector2(projectileSpeed.projectileSpeed, 0);
         }
 
         private void OnDestroy() {
