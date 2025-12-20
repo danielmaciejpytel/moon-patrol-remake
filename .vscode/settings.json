@@ -52,5 +52,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "moon-patrol-remake.sln"
+    "dotnet.defaultSolution": "moon-patrol-remake.slnx"
 }
