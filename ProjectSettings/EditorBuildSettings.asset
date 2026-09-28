@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StageSummary/DeadPlayerMenu.unity
     guid: e49a5d7ff3ea1442190eac2fadc5e999
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 7615b38303dd33b42831f4b5f0e5a8b0,
+      type: 3}
+  m_UseUCBPForAssetBundles: 0
