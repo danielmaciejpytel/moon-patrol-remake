@@ -28,6 +28,8 @@ namespace ScriptableObjects.Course {
             public int goodBonus = 1000;
             [Tooltip("Tło etapu (opis w HUD po checkpoincie)")]
             public string info = "MOUNTAINS";
+            [Tooltip("Bomby blue UFO zostawiają kratery (w oryginale dopiero w ostatnim etapie)")]
+            public bool bombCraters;
 
             public string Label => $"{Letters[fromLetter]}–{Letters[toLetter]}";
         }

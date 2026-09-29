@@ -89,6 +89,7 @@ MonoBehaviour:
   verticalDistanceRange: {fileID: 11400000, guid: 22c017105cb161b4fb04a5ce8741fa58,
     type: 2}
   poolMaxSize: 16
+  twinShotOffset: {x: -0.22, y: -0.09, z: 0}
   shootingEnabled: 1
 --- !u!1 &5799261185466914943
 GameObject:
@@ -299,6 +300,7 @@ GameObject:
   - component: {fileID: 6956607034192976408}
   - component: {fileID: 5799261185691537402}
   - component: {fileID: 4235750337855396567}
+  - component: {fileID: 1514984184423791994}
   m_Layer: 0
   m_Name: pfVehicle
   m_TagString: Player
@@ -417,6 +419,7 @@ MonoBehaviour:
   explosionEffect: {fileID: 883817552140479604, guid: 8b650b39c6345224695a71e577e3de99,
     type: 3}
   explosionLifetime: 4
+  wreckLifetime: 4
   autopilot: 0
 --- !u!114 &4235750337855396567
 MonoBehaviour:
@@ -437,6 +440,20 @@ MonoBehaviour:
   shootDistance: 7
   fireInterval: 0.35
   wideHole: 2.2
+--- !u!114 &1514984184423791994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5799261185691537407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef43a6ee1fc622c41ae9abfea4c6d2f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Vehicle.PlayerPowerUps
+  duration: 10
+  turboBonus: 0.15
 --- !u!1 &5799261185751826647
 GameObject:
   m_ObjectHideFlags: 0

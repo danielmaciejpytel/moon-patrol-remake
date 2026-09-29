@@ -15,6 +15,7 @@ namespace UI.Menu {
         [SerializeField] private LevelController levelController;
         [SerializeField] private CourseSO course;
         [SerializeField] private VehicleController menuVehicle;
+        [SerializeField] private ScriptableObjects.Scenes.ScenesSO scenes;
 
         [Header("Items")]
         [SerializeField] private MenuItemView continueItem;
@@ -56,6 +57,16 @@ namespace UI.Menu {
             RefreshBestRun();
             FirstSelected = continueItem.Interactable ? continueItem.gameObject : newGameItem.gameObject;
             Open();
+
+            // Wynik zakończonego przejazdu: od razu wpisywanie inicjałów w rankingu.
+            if (scenes != null && scenes.PendingRank != null && rankingScreen is RankingScreen ranking) {
+                var entry = scenes.PendingRank;
+                scenes.PendingRank = null;
+                ranking.OpenWithEntry(entry, () => {
+                    RefreshBestRun();
+                    Select(highScoresItem.gameObject);
+                });
+            }
         }
 
         protected override void OnCancel() { }

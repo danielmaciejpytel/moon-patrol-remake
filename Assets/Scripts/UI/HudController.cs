@@ -30,19 +30,37 @@ namespace UI {
         [SerializeField] private TMP_Text toastTitle;
         [SerializeField] private TMP_Text toastSubtitle;
 
+        [Header("Power-up & combo")]
+        [SerializeField] private TMP_Text powerUpLabel;
+        [SerializeField] private List<Graphic> powerUpPips = new List<Graphic>();
+        [SerializeField] private TMP_Text combo;
+
+        private Vehicle.PlayerPowerUps _powerUps;
         private Coroutine _toastRoutine;
         private float _lastCourseValue = -1f;
 
         private void OnEnable() {
             scoreStore.Changed += Refresh;
             GameEvents.Toast += ShowToast;
+            Combo.Changed += OnCombo;
             Refresh();
+            if (combo != null) combo.alpha = 0f;
             if (toast != null) toast.alpha = 0f;
         }
 
         private void OnDisable() {
             scoreStore.Changed -= Refresh;
             GameEvents.Toast -= ShowToast;
+            Combo.Changed -= OnCombo;
+        }
+
+        private void Start() {
+            _powerUps = FindFirstObjectByType<Vehicle.PlayerPowerUps>();
+        }
+
+        private void OnCombo(int multiplier) {
+            if (combo == null) return;
+            combo.text = $"×{multiplier}";
         }
 
         private void Refresh() {
@@ -52,12 +70,24 @@ namespace UI {
         }
 
         private void Update() {
+            UpdatePowerUp();
+            if (combo != null) combo.alpha = Mathf.MoveTowards(combo.alpha, Combo.Multiplier > 1 ? 1f : 0f, Time.deltaTime * 5f);
             if (courseBar == null || Mathf.Approximately(courseBar.value, _lastCourseValue)) return;
             _lastCourseValue = courseBar.value;
             foreach (var letter in courseLetters) {
                 if (letter == null || !int.TryParse(letter.name, out var index)) continue;
                 letter.color = index <= _lastCourseValue + 0.001f ? UiColors.Ink : UiColors.Dim;
             }
+        }
+
+        private void UpdatePowerUp() {
+            if (powerUpLabel == null) return;
+            var active = _powerUps != null ? _powerUps.Active : null;
+            var shields = _powerUps != null ? _powerUps.ShieldCharges : 0;
+            var name = active != null ? Vehicle.PlayerPowerUps.Name(active.Value) : shields > 0 ? $"SHIELD ×{shields}" : "NONE";
+            powerUpLabel.text = $"POWER-UP · <color=#f0a13a><b>{name}</b></color>";
+            var lit = active != null ? Mathf.CeilToInt(_powerUps.Remaining01 * powerUpPips.Count) : Mathf.Min(shields, powerUpPips.Count);
+            for (var i = 0; i < powerUpPips.Count; i++) powerUpPips[i].color = i < lit ? UiColors.Ufo : UiColors.Hex(0x3a3228);
         }
 
         public void ShowToast(string title, string subtitle, float seconds) {

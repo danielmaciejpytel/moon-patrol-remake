@@ -29,10 +29,13 @@ namespace Vehicle {
         [SerializeField] private ProjectileDistanceSO verticalDistanceRange;
         [SerializeField, Min(1)] private int poolMaxSize = 16;
 
+        [SerializeField] private Vector3 twinShotOffset = new Vector3(-0.22f, -0.09f, 0f);
+
         [SerializeField] private bool shootingEnabled = true;
 
         private ObjectPool<PooledProjectile> _horizontalPool;
         private ObjectPool<PooledProjectile> _verticalPool;
+        private PlayerPowerUps _powerUps;
 
         public void SetShootingEnabled(bool value) => shootingEnabled = value;
 
@@ -42,6 +45,7 @@ namespace Vehicle {
         private void Awake() {
             _horizontalPool = CreatePool(horizontalBulletPrefab);
             _verticalPool = CreatePool(verticalBulletPrefab);
+            _powerUps = GetComponentInParent<PlayerPowerUps>();
         }
 
         private void OnEnable() {
@@ -66,9 +70,13 @@ namespace Vehicle {
         }
 
         private void Fire() {
-
             var horizontal = _horizontalPool.Get();
             horizontal.Launch(firePointHorizon.position, horizonDistanceRange.Lifetime);
+            if (_powerUps != null && _powerUps.TwinShot) {
+                // Podwójny strzał (power-up / Twin cannon z garażu): drugi pocisk nieco niżej i z tyłu.
+                var second = _horizontalPool.Get();
+                second.Launch(firePointHorizon.position + twinShotOffset, horizonDistanceRange.Lifetime * 0.9f);
+            }
 
             var vertical = (VerticalBullet)_verticalPool.Get();
             vertical.SetFirePoint(firePointVertical);

@@ -17,6 +17,8 @@ namespace Projectiles.Enemy {
         [SerializeField] private bool createHole;
         [SerializeField, Min(0f)] private float shotDownEffectLifetime = 1f;
         [SerializeField, Min(0f)] private float groundEffectLifetime = 0.2f;
+        [Tooltip("Punkty za zestrzelenie rakiety/bomby")]
+        [SerializeField, Min(0)] private int shotDownScore = 50;
 
         private Rigidbody2D _rb;
         private bool _exploded;
@@ -26,7 +28,10 @@ namespace Projectiles.Enemy {
         private void FixedUpdate() => _rb.AddForce(transform.right * thrustForce);
 
         /// <summary>Zestrzelenie pociskiem gracza.</summary>
-        public void Destroyed() => Explode(shotDownEffectLifetime, false);
+        public void Destroyed() {
+            if (!_exploded) Combo.AwardHit(shotDownScore);
+            Explode(shotDownEffectLifetime, false);
+        }
 
         private void OnTriggerEnter2D(Collider2D other) {
             if (other.CompareTag(GameTags.Ground)) {
@@ -46,7 +51,7 @@ namespace Projectiles.Enemy {
 
             var position = transform.position;
             if (explosionEffect != null) Destroy(Instantiate(explosionEffect, position, Quaternion.identity), effectLifetime);
-            if (spawnHole && holeGameObject != null) Instantiate(holeGameObject, position, Quaternion.identity);
+            if (spawnHole && holeGameObject != null && GameRules.BombCraters) Instantiate(holeGameObject, position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

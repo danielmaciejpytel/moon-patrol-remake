@@ -24,7 +24,7 @@ namespace UI.Menu {
             menuItem.Button.onClick.AddListener(() => {
                 Close();
                 if (levelController == null) levelController = FindFirstObjectByType<LevelController>();
-                levelController.LoadMenu();
+                levelController.QuitToMenu();
             });
             input.PausePressed += OnPausePressed;
             _subscribed = true;

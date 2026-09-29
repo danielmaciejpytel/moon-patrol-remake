@@ -27,6 +27,8 @@ namespace ScriptableObjects.Scenes {
         [NonSerialized] public bool ContinuedAfterGameOver;
         [Tooltip("Łączny czas przejazdu (s) – do rankingu")]
         [NonSerialized] public int RunTime;
+        [Tooltip("Wynik zakończonego przejazdu czekający na wpisanie inicjałów w rankingu (menu)")]
+        [NonSerialized] public Settings.RankEntry PendingRank;
 
         public string MenuScene => menuScene;
         public string GameOverScene => gameOverScene;

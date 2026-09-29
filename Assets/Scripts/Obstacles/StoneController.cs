@@ -31,7 +31,7 @@ namespace Obstacles {
             if (_destroyed) return;
             _destroyed = true;
 
-            GameEvents.AwardScore(rockParams.DestroyScore);
+            Combo.AwardHit(rockParams.DestroyScore);
 
             if (explosionEffect != null) {
                 var explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);

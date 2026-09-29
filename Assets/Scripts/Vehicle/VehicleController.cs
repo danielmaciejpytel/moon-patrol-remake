@@ -36,6 +36,8 @@ namespace Vehicle {
         private float _jumpEndTime = float.NegativeInfinity;
         private float _nextJumpAllowedTime;
         private bool _jumpRequested;
+        private PlayerPowerUps _powerUps;
+        private float _invulnerableUntil;
 
         private bool IsInJumpPhase => Time.time < _jumpEndTime;
 
@@ -54,6 +56,7 @@ namespace Vehicle {
 
         private void Awake() {
             _tires = GetComponentsInChildren<VehicleTireController>();
+            _powerUps = GetComponent<PlayerPowerUps>();
             _speed = playerParams.PlayerSpeed;
         }
 
@@ -83,8 +86,10 @@ namespace Vehicle {
 
             _speed = Mathf.Approximately(throttle, 0f)
                 ? Mathf.MoveTowards(_speed, playerParams.PlayerSpeed, step)
-                : Mathf.Clamp(_speed + throttle * step, playerParams.MinimalSpeed, playerParams.MaxSpeed);
+                : Mathf.Clamp(_speed + throttle * step, playerParams.MinimalSpeed, MaxSpeed);
         }
+
+        private float MaxSpeed => playerParams.MaxSpeed * (_powerUps != null ? _powerUps.SpeedMultiplier : 1f);
 
         private void TryStartJump() {
             if (!_jumpRequested) return;
@@ -102,14 +107,19 @@ namespace Vehicle {
             foreach (var tire in _tires) {
                 var body = tire.Body;
                 body.linearVelocity = jumping
-                    ? new Vector2(playerParams.JumpHorizontalSpeed, playerParams.JumpHeightAccelerate)
+                    ? new Vector2(playerParams.JumpHorizontalSpeed, playerParams.JumpHeightAccelerate * (autopilot ? 1f : VehicleUpgrades.JumpMultiplier))
                     : new Vector2(_speed, Mathf.Min(body.linearVelocity.y, -playerParams.GroundStickSpeed));
             }
         }
 
         /// <summary>Wywoływane przez przeszkody i pociski. Idempotentne – wiele trafień w tej samej klatce = jedna śmierć.</summary>
         public void PlayerDeath() {
-            if (IsDead) return;
+            if (IsDead || Time.time < _invulnerableUntil) return;
+            if (_powerUps != null && _powerUps.TryAbsorbHit()) {
+                _invulnerableUntil = Time.time + 1f;
+                return;
+            }
+
             IsDead = true;
 
             AudioManager.Play(SoundId.Crash);
@@ -119,6 +129,7 @@ namespace Vehicle {
             }
 
             Died?.Invoke();
+            Combo.Reset();
             GameEvents.RaisePlayerDied();
             BreakApart();
         }

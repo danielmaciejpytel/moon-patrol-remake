@@ -64,8 +64,11 @@ namespace Scenes {
                 case SceneRole.Level:
                     EnterStage(scene.name);
                     break;
-                case SceneRole.StageSummary:
                 case SceneRole.FinalStageSummary:
+                    // Ekran końca gry (napisy) – potem menu z wpisem do rankingu.
+                    StartCoroutine(LoadAfterDelay(LoadMenu, loadNextSceneDelay * 2f));
+                    break;
+                case SceneRole.StageSummary:
                     StartCoroutine(LoadAfterDelay(LoadAfterSummary, loadNextSceneDelay));
                     break;
             }
@@ -79,6 +82,7 @@ namespace Scenes {
             scenesScriptableObject.CurrentStageLabel = stage != null ? stage.Label : sceneName;
             if (input != null) input.GameplayEnabled = true;
 
+            GameRules.BombCraters = stage != null && stage.bombCraters;
             var retry = scenesScriptableObject.Retrying;
             scenesScriptableObject.Retrying = false;
             if (stage == null) return;
@@ -137,6 +141,26 @@ namespace Scenes {
 
         public void LoadMenu() => LoadScene(scenesScriptableObject.MenuScene);
 
+        /// <summary>Wyjście z etapu do menu (pauza): przejazd kończy się na ostatnim punkcie kontrolnym.</summary>
+        public void QuitToMenu() {
+            var stage = course != null ? course.Get(scenesScriptableObject.CurrentStageIndex) : null;
+            if (stage != null) EndRun(stage.fromLetter, false);
+            LoadMenu();
+        }
+
+        private void EndRun(int reachedLetter, bool finished) {
+            var stage = course != null ? course.Get(scenesScriptableObject.CurrentStageIndex) : null;
+            var score = scoreStore.PlayerOverallScore;
+            if (finished) GameProgress.ClearRun();
+            if (GameProgress.RankFor(score) < 0) return;
+            scenesScriptableObject.PendingRank = new RankEntry {
+                score = score,
+                reached = reachedLetter,
+                time = scenesScriptableObject.RunTime + (finished ? 0 : scoreStore.StageTime),
+                stage = stage != null ? stage.Label : ""
+            };
+        }
+
         /// <summary>
         /// 3 życia na etap: śmierć cofa do punktu kontrolnego (litera główna na początku etapu) z wynikiem z tej chwili.
         /// Po utracie wszystkich żyć – Continue: etap od początku, wynik od zera, pełne życia.
@@ -166,12 +190,13 @@ namespace Scenes {
             var index = course != null ? course.IndexOfSummary(SceneManager.GetActiveScene().name) : -1;
             var next = course != null ? course.Get(index + 1) : null;
             if (index >= 0 && next == null) {
+                // Koniec trasy A–Z: wynik do rankingu, powrót do menu.
+                EndRun(course.Get(index).toLetter, true);
                 LoadScene(scenesScriptableObject.GameFinishedScene);
                 return;
             }
 
             if (next != null) LoadScene(next.scene);
-            else if (_role == SceneRole.FinalStageSummary) LoadScene(scenesScriptableObject.GameFinishedScene);
             else LoadNextBuildIndex();
         }
 
@@ -201,6 +226,7 @@ namespace Scenes {
 
         private SceneRole ResolveRole(Scene scene) {
             if (role != SceneRole.Auto) return role;
+            if (scene.name == scenesScriptableObject.GameFinishedScene) return SceneRole.FinalStageSummary;
             if (scene.name.StartsWith(StageSummaryPrefix)) return SceneRole.StageSummary;
             if (course != null && course.IndexOfScene(scene.name) >= 0) return SceneRole.Level;
             return scene.buildIndex == 0 ? SceneRole.Menu : SceneRole.Level;

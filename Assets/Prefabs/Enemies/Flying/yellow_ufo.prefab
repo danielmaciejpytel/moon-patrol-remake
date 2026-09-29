@@ -147,6 +147,10 @@ MonoBehaviour:
   explosionLifetime: 4
   pfScorePopup: {fileID: 1705395976370819582, guid: 419884f15473a324ab7a404ff8e5b63c,
     type: 3}
+  powerUpPrefab: {fileID: 2013717612425747235, guid: 480acb50854801a429dedb84a4143c1d,
+    type: 3}
+  powerUpChance: 0.15
+  powerUpForwardSpeed: 4
 --- !u!114 &4667446680779670627
 MonoBehaviour:
   m_ObjectHideFlags: 0

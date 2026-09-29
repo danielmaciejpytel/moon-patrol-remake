@@ -27,6 +27,18 @@ EditorBuildSettings:
     path: Assets/Scenes/StageSummary/StageSummary J-O.unity
     guid: 4eac2e9a96991164b886b8811cb17c21
   - enabled: 1
+    path: Assets/Scenes/Levels/O-T.unity
+    guid: 01f8d79b7f2fc32419d0ac74321e5771
+  - enabled: 1
+    path: Assets/Scenes/StageSummary/StageSummary O-T.unity
+    guid: 18f1ed3e52d9c5243882ade9b34a72fe
+  - enabled: 1
+    path: Assets/Scenes/Levels/T-Z.unity
+    guid: c1396680083008a4e98b29f45c166c35
+  - enabled: 1
+    path: Assets/Scenes/StageSummary/StageSummary T-Z.unity
+    guid: 39c0bab7360442d418792cad7756d9b3
+  - enabled: 1
     path: Assets/Scenes/StageSummary/GameFinished.unity
     guid: 59f8fe8dceb11274797a0635afd7614b
   - enabled: 1

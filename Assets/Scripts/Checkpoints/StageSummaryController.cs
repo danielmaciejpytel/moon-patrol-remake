@@ -51,6 +51,9 @@ namespace Checkpoints {
             var best = GameProgress.BestStageTime(index);
             var newRecord = GameProgress.RecordStageTime(index, time);
             GameProgress.ReachLetter(stage.toLetter);
+            // Kredyty do garażu: punkty zdobyte w etapie (z bonusem) / 5.
+            GameProgress.Data.credits += (scoreStore.PlayerStageScore + scoreStore.Bonus) / 5;
+            GameProgress.Save();
 
             title.text = $"STAGE {stage.Label} CLEAR";
             stageTime.SetText("{0:000} s", time);

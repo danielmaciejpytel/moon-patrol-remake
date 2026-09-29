@@ -17,6 +17,12 @@ namespace Enemy {
         [Tooltip("Planowany popup z punktami – obecnie nieużywany")]
         [SerializeField] private Transform pfScorePopup;
 
+        [Header("Power-up drop")]
+        [SerializeField] private Vehicle.PowerUpPickup powerUpPrefab;
+        [SerializeField, Range(0f, 1f)] private float powerUpChance = 0.15f;
+        [Tooltip("Prędkość pozioma wypadającego power-upu (≈ prędkość pojazdu, żeby spadł mu na drogę)")]
+        [SerializeField] private float powerUpForwardSpeed = 4f;
+
         private EnemyAI _enemyAi;
         private float _fleeTime;
         private bool _fleeing;
@@ -36,7 +42,7 @@ namespace Enemy {
             if (_destroyed) return;
             _destroyed = true;
 
-            GameEvents.AwardScore(enemyParamsSO.Score);
+            Combo.AwardHit(enemyParamsSO.Score);
             GameEvents.RaiseUfoDestroyed();
             AudioManager.Play(SoundId.Hit);
 
@@ -45,6 +51,9 @@ namespace Enemy {
                 var explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity, transform.parent);
                 Destroy(explosion, explosionLifetime);
             }
+
+            if (powerUpPrefab != null && Random.value < powerUpChance)
+                Vehicle.PowerUpPickup.Spawn(powerUpPrefab, transform.position, powerUpForwardSpeed);
 
             Destroy(gameObject);
         }

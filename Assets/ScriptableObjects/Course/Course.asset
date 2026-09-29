@@ -22,6 +22,7 @@ MonoBehaviour:
     averageTime: 125
     goodBonus: 1000
     info: MOUNTAINS
+    bombCraters: 0
   - scene: E-J
     summaryScene: StageSummary E-J
     fromLetter: 4
@@ -31,6 +32,7 @@ MonoBehaviour:
     averageTime: 120
     goodBonus: 1000
     info: ALIEN CITY
+    bombCraters: 0
   - scene: J-O
     summaryScene: StageSummary J-O
     fromLetter: 9
@@ -40,3 +42,24 @@ MonoBehaviour:
     averageTime: 105
     goodBonus: 1000
     info: "MOUNTAINS \xB7 MINEFIELD"
+    bombCraters: 0
+  - scene: O-T
+    summaryScene: StageSummary O-T
+    fromLetter: 14
+    toLetter: 19
+    startX: -24
+    endX: 466.2
+    averageTime: 130
+    goodBonus: 1000
+    info: ALIEN CITY
+    bombCraters: 0
+  - scene: T-Z
+    summaryScene: StageSummary T-Z
+    fromLetter: 19
+    toLetter: 25
+    startX: -23.8
+    endX: 456.7
+    averageTime: 125
+    goodBonus: 1000
+    info: "MOUNTAINS \xB7 BOMBS LEAVE CRATERS"
+    bombCraters: 1
