@@ -10,7 +10,7 @@ namespace Checkpoints {
         private bool _reached;
 
         private void OnTriggerEnter2D(Collider2D other) {
-            if (_reached || !VehicleHitDetection.TryGetVehicle(other, out _)) return;
+            if (_reached || !VehicleHitDetection.TryGetVehicle(other, out var vehicle) || vehicle.IsDead) return;
             _reached = true;
 
             if (levelController == null) levelController = FindFirstObjectByType<LevelController>();

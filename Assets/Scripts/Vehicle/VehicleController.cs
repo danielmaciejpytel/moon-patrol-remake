@@ -21,6 +21,8 @@ namespace Vehicle {
         [SerializeField] private InputReaderSO input;
         [SerializeField] private GameObject explosionEffect;
         [SerializeField, Min(0f)] private float explosionLifetime = 4f;
+        [Tooltip("Po tym czasie odpadnięte koła znikają")]
+        [SerializeField, Min(0f)] private float wreckLifetime = 4f;
         [Tooltip("W menu pojazd jedzie sam ze stałą prędkością i ignoruje sterowanie")]
         [SerializeField] private bool autopilot;
 
@@ -118,7 +120,30 @@ namespace Vehicle {
 
             Died?.Invoke();
             GameEvents.RaisePlayerDied();
-            gameObject.SetActive(false);
+            BreakApart();
+        }
+
+        /// <summary>
+        /// Rozpad pojazdu jak w makiecie: koła odpadają i toczą się osobno, nadwozie podskakuje i koziołkuje.
+        /// </summary>
+        private void BreakApart() {
+            var body = GetComponent<Rigidbody2D>();
+            var forward = _speed;
+            foreach (var tire in _tires) {
+                if (tire.TryGetComponent<WheelJoint2D>(out var joint)) Destroy(joint);
+                tire.transform.SetParent(null, true);
+                var rb = tire.Body;
+                rb.linearVelocity = new Vector2(forward * UnityEngine.Random.Range(-0.2f, 0.9f), UnityEngine.Random.Range(3f, 6f));
+                rb.angularVelocity = UnityEngine.Random.Range(-720f, 720f);
+                Destroy(tire.gameObject, wreckLifetime);
+            }
+
+            if (body != null) {
+                body.bodyType = RigidbodyType2D.Dynamic;
+                body.constraints = RigidbodyConstraints2D.None;
+                body.linearVelocity = new Vector2(forward * 0.5f, 5f);
+                body.angularVelocity = (UnityEngine.Random.value < 0.5f ? -1f : 1f) * UnityEngine.Random.Range(200f, 400f);
+            }
         }
     }
 }

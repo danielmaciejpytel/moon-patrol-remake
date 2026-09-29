@@ -35,7 +35,10 @@ namespace Scenes {
         [SerializeField] private InputReaderSO input;
         [SerializeField] private SceneRole role = SceneRole.Auto;
         [SerializeField, Min(0f)] private float loadNextSceneDelay = 5f;
-        [SerializeField, Min(0f)] private float gameOverDelay = 3f;
+        [Tooltip("Czas od śmierci do powrotu na punkt kontrolny (rozpad pojazdu)")]
+        [SerializeField, Min(0f)] private float respawnDelay = 2.4f;
+        [Tooltip("Czas od utraty ostatniego życia do Continue")]
+        [SerializeField, Min(0f)] private float gameOverDelay = 3.4f;
 
         private bool _transitionStarted;
         private SceneRole _role;
@@ -134,9 +137,29 @@ namespace Scenes {
 
         public void LoadMenu() => LoadScene(scenesScriptableObject.MenuScene);
 
+        /// <summary>
+        /// 3 życia na etap: śmierć cofa do punktu kontrolnego (litera główna na początku etapu) z wynikiem z tej chwili.
+        /// Po utracie wszystkich żyć – Continue: etap od początku, wynik od zera, pełne życia.
+        /// </summary>
         private void OnPlayerDied() {
-            if (scoreStore != null) scoreStore.RevertStage();
-            StartCoroutine(LoadAfterDelay(GameOver, gameOverDelay));
+            if (_role != SceneRole.Level || _transitionStarted) return;
+            var lastLife = scoreStore.Lives <= 1;
+            var livesLeft = scoreStore.Lives - 1;
+            if (lastLife) GameEvents.ShowToast("GAME OVER", "CONTINUE: STAGE RESTARTS, SCORE RESETS", 2.2f);
+            else GameEvents.ShowToast("ROVER DOWN", livesLeft == 1 ? "1 LIFE LEFT" : $"{livesLeft} LIVES LEFT", 2.2f);
+            StartCoroutine(LoadAfterDelay(Respawn, lastLife ? gameOverDelay : respawnDelay));
+        }
+
+        private void Respawn() {
+            var gameOver = scoreStore.LoseLife();
+            scenesScriptableObject.Retrying = true;
+            scenesScriptableObject.ContinuedAfterGameOver = gameOver;
+            if (gameOver) {
+                scenesScriptableObject.RunTime = 0;
+                GameProgress.SetCheckpoint(scenesScriptableObject.CurrentStageIndex, 0, 0);
+            }
+
+            LoadScene(SceneManager.GetActiveScene().name);
         }
 
         private void LoadAfterSummary() {
