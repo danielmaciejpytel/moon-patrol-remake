@@ -1,29 +1,31 @@
-﻿#pragma warning disable 649
-
+using Obstacles;
 using ScriptableObjects.Projectile;
 using UnityEngine;
-using Vehicle;
 
 namespace Projectiles.Enemy {
+    /// <summary>
+    /// Poziomy pocisk wroga. Zmiany: bez Debug.Log w OnDestroy i przy każdym triggerze
+    /// (log z błędnym tekstem "Vertical Bullet hit"), rozpoznanie pojazdu także po kole,
+    /// czas życia zamiast lotu w nieskończoność poza ekranem.
+    /// </summary>
+    [RequireComponent(typeof(Rigidbody2D))]
     public class EnemyHorizonBulletController : MonoBehaviour {
         [SerializeField] private Rigidbody2D bulletRigidBody;
         [SerializeField] private ProjectileSpeedSO projectileSpeed;
+        [SerializeField, Min(0.1f)] private float lifetime = 5f;
+
+        private void Awake() {
+            if (bulletRigidBody == null) bulletRigidBody = GetComponent<Rigidbody2D>();
+        }
 
         private void Start() {
-            bulletRigidBody.linearVelocity = new Vector2(projectileSpeed.projectileSpeed, 0);
+            bulletRigidBody.linearVelocity = new Vector2(projectileSpeed.ProjectileSpeed, 0f);
+            Destroy(gameObject, lifetime);
         }
 
-        private void OnDestroy() {
-            Debug.Log($"{gameObject.name} Destroyed");
-        }
-
-        private void OnTriggerEnter2D(Collider2D obj) {
+        private void OnTriggerEnter2D(Collider2D other) {
+            if (VehicleHitDetection.TryGetVehicle(other, out var vehicle)) vehicle.PlayerDeath();
             Destroy(gameObject);
-            var player = obj.GetComponent<VehicleController>();
-            Debug.Log($"Enemy hit: {obj} ");
-            if (player == null) return;
-            player.PlayerDeath();
-            Debug.Log($"Vertical Bullet hit: {obj.name}");
         }
     }
 }

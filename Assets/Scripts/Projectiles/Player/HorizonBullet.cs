@@ -1,27 +1,28 @@
-﻿#pragma warning disable 649
-
 using Interfaces;
 using ScriptableObjects.Projectile;
 using UnityEngine;
 
 namespace Projectiles.Player {
-    public class HorizonBullet : MonoBehaviour {
+    [RequireComponent(typeof(Rigidbody2D))]
+    public class HorizonBullet : PooledProjectile {
         [SerializeField] private Rigidbody2D bulletRigidBody;
         [SerializeField] private ProjectileSpeedSO projectileSpeed;
 
-        private void Start() {
-            bulletRigidBody.linearVelocity = new Vector2(projectileSpeed.projectileSpeed, 0);
+        private void Awake() {
+            if (bulletRigidBody == null) bulletRigidBody = GetComponent<Rigidbody2D>();
         }
 
-        private void OnDestroy() {
-            Debug.Log($"{gameObject.name} Destroyed");
+        public override void Launch(Vector3 position, float lifetime) {
+            base.Launch(position, lifetime);
+            bulletRigidBody.position = position;
+            bulletRigidBody.linearVelocity = new Vector2(projectileSpeed.ProjectileSpeed, 0f);
         }
 
-        private void OnTriggerEnter2D(Collider2D obj) {
-            var objetHit = obj.GetComponent<IDestroyable>();
-            objetHit?.Destroyed();
-            Destroy(gameObject);
-            Debug.Log($"Vertical Bullet hit: {obj.name}");
+        private void OnTriggerEnter2D(Collider2D other) {
+            // Wcześniej pocisk znikał na KAŻDYM triggerze (także na kołach własnego pojazdu i strefach fal).
+            if (!other.TryGetComponent<IDestroyable>(out var target)) return;
+            target.Destroyed();
+            Despawn();
         }
     }
 }

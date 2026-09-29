@@ -1,37 +1,44 @@
-﻿#pragma warning disable 649
-
+using Core;
 using Interfaces;
-using Score;
 using ScriptableObjects.Obstacles;
 using UnityEngine;
-using Vehicle;
 
 namespace Obstacles {
+    /// <summary>
+    /// Kamień. Naprawione:
+    /// - warunek "vehicleController != null || vehicleTire" wywoływał PlayerDeath() na null;
+    /// - GetComponent&lt;ScoreManager&gt;() na kamieniu (ScoreManager był doklejony do każdego kamienia i miny,
+    ///   a każdy z nich w Start zerował wynik gracza) → GameEvents.AwardScore;
+    /// - brak zabezpieczenia przed podwójnym zniszczeniem (dwa pociski w jednej klatce = podwójne punkty).
+    /// </summary>
+    [RequireComponent(typeof(SpriteRenderer))]
     public class StoneController : MonoBehaviour, IDestroyable {
         [SerializeField] private ObstaclesParamsSO rockParams;
         [SerializeField] private GameObject explosionEffect;
+        [SerializeField, Min(0f)] private float explosionLifetime = 4f;
 
-        private void Start() {
-            GetComponent<SpriteRenderer>().sprite = rockParams.obstacleSprite;
+        private bool _destroyed;
+
+        private void Awake() {
+            if (rockParams.ObstacleSprite != null) GetComponent<SpriteRenderer>().sprite = rockParams.ObstacleSprite;
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
-            var vehicleController = other.GetComponentInParent<VehicleController>();
-            var vehicleTire = other.GetComponent<VehicleTireController>();
-
-            if (vehicleController != null || vehicleTire) vehicleController.PlayerDeath();
+            if (VehicleHitDetection.TryGetVehicle(other, out var vehicle)) vehicle.PlayerDeath();
         }
 
         public void Destroyed() {
-            var scoreManager = GetComponent<ScoreManager>();
-            scoreManager.AddOverallPlayerScore(rockParams.destroyScore);
+            if (_destroyed) return;
+            _destroyed = true;
+
+            GameEvents.AwardScore(rockParams.DestroyScore);
 
             if (explosionEffect != null) {
-                var explosionEffectGameObject = Instantiate(explosionEffect, transform.position, Quaternion.identity);
-                Destroy(explosionEffectGameObject, 4f);
+                var explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+                Destroy(explosion, explosionLifetime);
             }
             else {
-                Debug.LogWarning($"{gameObject.name} missing explosion effect");
+                Debug.LogWarning($"{name} missing explosion effect", this);
             }
 
             Destroy(gameObject);

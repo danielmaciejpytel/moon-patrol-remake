@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using Vehicle;
+using Audio;
 
 namespace Checkpoints {
-    public class FinalCheckpointSound : MonoBehaviour {
-        private void OnTriggerEnter2D(Collider2D obj) {
-            var vehicle = obj.GetComponent<VehicleController>();
-            if (vehicle != null) FindObjectOfType<AudioManager>().Play("LastPoint");
-        }
+    /// <summary>
+    /// Zachowany tylko dla zgodności z obiektami w scenach (ten sam GUID skryptu).
+    /// Docelowo: zamienić na CheckPointSound z sound = LastPoint i usunąć ten plik.
+    /// </summary>
+    public class FinalCheckpointSound : CheckPointSound {
+        protected override SoundId Sound => SoundId.LastPoint;
     }
 }

@@ -12,12 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5ec5576c04f6f4b9be7009ae9b1998, type: 3}
   m_Name: Yellow_Ufo
   m_EditorClassIdentifier: 
-  HP: 0
-  score: 100
+  type: 0
   sprite: {fileID: 0}
+  HP: 1
+  score: 100
+  timeToFlee: 10
+  moveSpeed: 5
+  verticalSpeed: 1
+  fleeSpeed: 15
+  directionChangeTime: 2
+  wallBounceSpeed: 4
+  projectileKind: 0
+  attackChance: 0.7
+  attackDelayMin: 2
+  attackDelayMax: 4
   weaponRange: 0
   visionRange: 0
-  timeToFlee: 10
   bulletPrefab1: {fileID: 0}
   bulletPrefab2: {fileID: 0}
   deathEffect: {fileID: 0}

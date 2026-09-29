@@ -1,23 +1,39 @@
-﻿using System.Collections;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
-// TODO REMOVE
 namespace Text {
+    /// <summary>
+    /// Efekt maszyny do pisania. Oryginał był martwy (ustawianie tekstu zakomentowane, "TODO REMOVE"),
+    /// a komponent i tak wisiał w 4 scenach, alokując Substring co krok.
+    /// Teraz: TMP maxVisibleCharacters – zero alokacji, działa z rich text.
+    /// </summary>
+    [RequireComponent(typeof(TMP_Text))]
     public class TypeWriterEffect : MonoBehaviour {
-        public float delay = 0.1f;
-        public string fullText;
-        private string currentText = "";
+        [SerializeField, Min(0f)] private float delay = 0.1f;
+        [Tooltip("Pusty = użyj tekstu ustawionego w komponencie TMP")]
+        [SerializeField, TextArea] private string fullText;
 
-        private void Start() {
-            StartCoroutine(ShowText());
-        }
+        private TMP_Text _label;
+
+        private void Awake() => _label = GetComponent<TMP_Text>();
+
+        private void OnEnable() => StartCoroutine(ShowText());
 
         private IEnumerator ShowText() {
-            for (var i = 0; i < fullText.Length + 1; i++) {
-                currentText = fullText.Substring(0, i);
-                // GetComponent<UnityEngine.UI.Text>().text = currentText;
-                yield return new WaitForSeconds(delay);
-            }
+            if (!string.IsNullOrEmpty(fullText)) _label.text = fullText;
+            _label.maxVisibleCharacters = 0;
+
+            // Liczba znaków czytana w każdym kroku – tekst może zostać ustawiony przez inny skrypt dopiero w Start().
+            var wait = new WaitForSeconds(delay);
+            var shown = 0;
+            do {
+                yield return wait;
+                _label.ForceMeshUpdate();
+                _label.maxVisibleCharacters = ++shown;
+            } while (shown < _label.textInfo.characterCount);
+
+            _label.maxVisibleCharacters = int.MaxValue;
         }
     }
 }

@@ -1,66 +1,70 @@
-﻿using UnityEngine;
+using Core;
+using ScriptableObjects.Enemies;
+using UnityEngine;
 
 namespace Enemy {
+    /// <summary>
+    /// Ruch UFO. Zmiany: parametry z EnemyParamsSO (wcześniej TODO + stałe w kodzie),
+    /// CompareTag zamiast porównania nazwy "AiWalls", czytelny licznik zmiany kierunku.
+    /// BŁĄD naprawiony: EnemyFlee() zmieniał _movementDirection, ale nie przeliczał _movementPerSecond,
+    /// więc "uciekające" UFO leciało dalej starym torem.
+    /// Ruch pozostaje przez transform w Update celowo: UFO są dziećmi AiWalls (poruszających się z kamerą),
+    /// a ich Rigidbody2D jest Kinematic – MovePosition w przestrzeni świata walczyłoby z ruchem rodzica.
+    /// Wymaga: obiekty ścian AI otagowane "AiWalls".
+    /// </summary>
     [RequireComponent(typeof(PolygonCollider2D))]
     [DisallowMultipleComponent]
     public class EnemyAI : MonoBehaviour {
-        // TODO take from enemyParamsSO
-        private float _characterVelocity = 5f;
+        [SerializeField] private EnemyParamsSO enemyParams;
+        [Tooltip("Po ucieczce UFO jest niszczone po tym czasie od kontaktu ze ścianą")]
+        [SerializeField, Min(0f)] private float destroyAfterFleeDelay = 2f;
 
-        private readonly float _directionChangeTime = 2f;
+        private Vector2 _velocity;
+        private float _nextDirectionChangeTime;
+        private bool _firstMove = true;
+        private bool _fleeing;
+        private bool _scheduledForDestroy;
 
-        private float _latestDirectionChangeTime;
-        private bool _moveDownAtStart = true;
-
-        private Vector2 _movementDirection;
-        private Vector2 _movementPerSecond;
-
-        private bool _reverse, _flee;
+        private float Speed => enemyParams != null ? enemyParams.MoveSpeed : 5f;
+        private float VerticalSpeed => enemyParams != null ? enemyParams.VerticalSpeed : 1f;
+        private float DirectionChangeTime => enemyParams != null ? enemyParams.DirectionChangeTime : 2f;
 
         public void EnemyFlee() {
-            _flee = true;
-            _characterVelocity = 15f;
-            _movementDirection = new Vector2(Random.Range(-1f, 1f), 1f);
+            _fleeing = true;
+            var fleeSpeed = enemyParams != null ? enemyParams.FleeSpeed : 15f;
+            _velocity = new Vector2(Random.Range(-1f, 1f), 1f) * fleeSpeed;
         }
 
-        private void Start() {
-            _latestDirectionChangeTime = 0f;
-            CalcuateNewMovementVector();
-        }
+        private void Start() => PickNewDirection();
 
         private void Update() {
-            var position = transform.position;
-            position = new Vector2(position.x + _movementPerSecond.x * Time.deltaTime,
-                position.y + _movementPerSecond.y * Time.deltaTime);
-            transform.position = position;
-            if (_flee) return;
-            if (Time.time - _latestDirectionChangeTime > _directionChangeTime) _reverse = false;
-            if (Time.time - _latestDirectionChangeTime > _directionChangeTime && _reverse != true) {
-                _latestDirectionChangeTime = Time.time;
-                CalcuateNewMovementVector();
-            }
+            transform.position += (Vector3)(_velocity * Time.deltaTime);
+
+            if (!_fleeing && Time.time >= _nextDirectionChangeTime) PickNewDirection();
         }
 
         private void OnCollisionEnter2D(Collision2D collision) {
-            if (collision.gameObject.name == "AiWalls" && _flee) Destroy(gameObject, 2f);
-            if (collision.gameObject.name == "AiWalls" && _flee == false) {
-                _movementDirection = -_movementDirection;
-                _movementPerSecond = new Vector2(_movementDirection.x * 4, _movementDirection.y);
-                _reverse = true;
-            }
-        }
+            if (!collision.gameObject.CompareTag(GameTags.AiWalls)) return;
 
-        private void CalcuateNewMovementVector() {
-            if (_moveDownAtStart) {
-                _movementDirection = new Vector2(Random.Range(-1f, 1f), -1f);
-                _movementPerSecond = new Vector2(_movementDirection.x * _characterVelocity, _movementDirection.y);
-                _moveDownAtStart = false;
-                _latestDirectionChangeTime = Time.time;
+            if (_fleeing) {
+                if (_scheduledForDestroy) return;
+                _scheduledForDestroy = true;
+                Destroy(gameObject, destroyAfterFleeDelay);
                 return;
             }
 
-            _movementDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-            _movementPerSecond = new Vector2(_movementDirection.x * _characterVelocity, _movementDirection.y);
+            // Odbicie od ściany; przez jeden okres kierunek nie jest losowany ponownie.
+            var bounce = enemyParams != null ? enemyParams.WallBounceSpeed : 4f;
+            _velocity = new Vector2(-_velocity.x / Speed * bounce, -_velocity.y);
+            _nextDirectionChangeTime = Time.time + DirectionChangeTime;
+        }
+
+        private void PickNewDirection() {
+            // Na początku UFO zawsze opada w stronę gracza.
+            var y = _firstMove ? -1f : Random.Range(-1f, 1f);
+            _firstMove = false;
+            _velocity = new Vector2(Random.Range(-1f, 1f) * Speed, y * VerticalSpeed);
+            _nextDirectionChangeTime = Time.time + DirectionChangeTime;
         }
     }
 }

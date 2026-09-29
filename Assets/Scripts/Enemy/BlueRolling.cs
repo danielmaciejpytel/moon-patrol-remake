@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-
-public class BlueRolling : MonoBehaviour {
-    void Update() {
-        transform.Rotate(0, 0, 180 * Time.deltaTime); //rotates 50 degrees per second around z axis
-    }
+namespace Enemy {
+    /// <summary>
+    /// Zachowany dla zgodności z prefabem blue_ufo (ten sam GUID skryptu). Docelowo zamienić na Utils.Rotator.
+    /// </summary>
+    public class BlueRolling : Utils.Rotator { }
 }

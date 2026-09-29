@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6da000dae95b6814cb302a9da48a1bf1, type: 3}
   m_Name: ScenesSO
   m_EditorClassIdentifier: 
-  stageSummary:
-    m_Handle: 4
-  gameOverScene:
-    m_Handle: 4
-  currentLevel: A-E
+  menuScene: StartMenuv2.0
+  gameOverScene: DeadPlayerMenu
+  gameFinishedScene: GameFinished

@@ -1,31 +1,21 @@
-﻿#pragma warning disable 649
-#pragma warning disable 414
-
-using Score;
+using Core;
 using ScriptableObjects.Obstacles;
 using UnityEngine;
-using Vehicle;
 
 namespace Obstacles {
+    /// <summary>
+    /// Punkty za przeskoczenie przeszkody. Naprawione: flaga _isColliderIsUntouched była ustawiana, ale nigdy
+    /// sprawdzana → punkty mogły być przyznane wielokrotnie. Brak GameObject.Find("ScoreManager").
+    /// </summary>
     public class ScoreJumpOverController : MonoBehaviour {
         [SerializeField] private ObstaclesParamsSO obstacleParamsScriptableObject;
 
-        private bool _isColliderIsUntouched = true;
-        private ScoreManager _scoreManager;
+        private bool _awarded;
 
-        private void Start() {
-            _scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
-        }
-
-        private void OnTriggerEnter2D(Collider2D obj) {
-            var vehicle = obj.GetComponent<VehicleController>();
-            if (vehicle != null) {
-                _isColliderIsUntouched = false;
-                Debug.Log($"Score jump over: {obstacleParamsScriptableObject.jumpOverScore}");
-                _scoreManager.AddOverallPlayerScore(obstacleParamsScriptableObject.jumpOverScore);
-            }
-
-            ;
+        private void OnTriggerEnter2D(Collider2D other) {
+            if (_awarded || !VehicleHitDetection.TryGetVehicle(other, out var vehicle) || vehicle.IsDead) return;
+            _awarded = true;
+            GameEvents.AwardScore(obstacleParamsScriptableObject.JumpOverScore);
         }
     }
 }
