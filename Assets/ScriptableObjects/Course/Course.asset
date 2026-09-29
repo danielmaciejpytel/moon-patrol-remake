@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 884958ed16daf4849b9879a93d49dee4, type: 3}
+  m_Name: Course
+  m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.Course.CourseSO
+  stages:
+  - scene: A-E
+    summaryScene: StageSummary A-E
+    fromLetter: 0
+    toLetter: 4
+    startX: -24
+    endX: 466.2
+    averageTime: 125
+    goodBonus: 1000
+    info: MOUNTAINS
+  - scene: E-J
+    summaryScene: StageSummary E-J
+    fromLetter: 4
+    toLetter: 9
+    startX: -23.8
+    endX: 456.7
+    averageTime: 120
+    goodBonus: 1000
+    info: ALIEN CITY
+  - scene: J-O
+    summaryScene: StageSummary J-O
+    fromLetter: 9
+    toLetter: 14
+    startX: 0
+    endX: 404.9
+    averageTime: 105
+    goodBonus: 1000
+    info: "MOUNTAINS \xB7 MINEFIELD"

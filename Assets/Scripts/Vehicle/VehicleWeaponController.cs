@@ -75,6 +75,7 @@ namespace Vehicle {
             vertical.Launch(firePointVertical.position, verticalDistanceRange.Lifetime);
 
             AudioManager.Play(SoundId.Blaster);
+            Core.GameEvents.RaiseShotFired();
         }
 
         private ObjectPool<PooledProjectile> CreatePool(PooledProjectile prefab) {

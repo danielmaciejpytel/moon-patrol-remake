@@ -37,6 +37,7 @@ namespace Enemy {
             _destroyed = true;
 
             GameEvents.AwardScore(enemyParamsSO.Score);
+            GameEvents.RaiseUfoDestroyed();
             AudioManager.Play(SoundId.Hit);
 
             if (explosionEffect != null) {

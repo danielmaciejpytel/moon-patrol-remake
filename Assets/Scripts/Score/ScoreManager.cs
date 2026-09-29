@@ -33,10 +33,20 @@ namespace Score {
             }
         }
 
-        private void OnEnable() => GameEvents.ScoreAwarded += OnScoreAwarded;
+        private void OnEnable() {
+            GameEvents.ScoreAwarded += OnScoreAwarded;
+            GameEvents.UfoSpawned += scoreStore.CountUfoSpawned;
+            GameEvents.UfoDestroyed += scoreStore.CountUfoDestroyed;
+            GameEvents.ShotFired += scoreStore.CountShotFired;
+            GameEvents.ShotHit += scoreStore.CountShotHit;
+        }
 
         private void OnDisable() {
             GameEvents.ScoreAwarded -= OnScoreAwarded;
+            GameEvents.UfoSpawned -= scoreStore.CountUfoSpawned;
+            GameEvents.UfoDestroyed -= scoreStore.CountUfoDestroyed;
+            GameEvents.ShotFired -= scoreStore.CountShotFired;
+            GameEvents.ShotHit -= scoreStore.CountShotHit;
             if (_owner == this) _owner = null;
         }
 

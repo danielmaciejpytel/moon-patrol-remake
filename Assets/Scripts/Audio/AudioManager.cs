@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Settings;
 using UnityEngine;
 
 namespace Audio {
@@ -51,11 +52,23 @@ namespace Audio {
         }
 
         private void Start() {
-            if (_instance == this && playMusicOnStart) PlayInternal(music);
+            if (_instance != this) return;
+            ApplyVolumes();
+            GameSettings.Changed += ApplyVolumes;
+            if (playMusicOnStart) PlayInternal(music);
         }
 
         private void OnDestroy() {
-            if (_instance == this) _instance = null;
+            if (_instance != this) return;
+            GameSettings.Changed -= ApplyVolumes;
+            _instance = null;
+        }
+
+        /// <summary>Głośność z ustawień gracza: dźwięki zapętlone to muzyka, pozostałe to efekty.</summary>
+        private void ApplyVolumes() {
+            var settings = GameSettings.Data;
+            foreach (var sound in _lookup.Values)
+                sound.Source.volume = sound.volume * (sound.loop ? settings.music : settings.effects);
         }
 
         public static void Play(SoundId id) {

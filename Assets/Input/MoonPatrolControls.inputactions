@@ -9,7 +9,7 @@
                 { "name": "Jump", "type": "Button", "id": "6b1f3a52-0c1e-4d7a-9c3b-1a2b3c4d5e03", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
                 { "name": "Shoot", "type": "Button", "id": "6b1f3a52-0c1e-4d7a-9c3b-1a2b3c4d5e04", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
                 { "name": "Start", "type": "Button", "id": "6b1f3a52-0c1e-4d7a-9c3b-1a2b3c4d5e05", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
-                { "name": "Quit", "type": "Button", "id": "6b1f3a52-0c1e-4d7a-9c3b-1a2b3c4d5e06", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Pause", "type": "Button", "id": "6b1f3a52-0c1e-4d7a-9c3b-1a2b3c4d5e06", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
                 { "name": "AnyKey", "type": "Button", "id": "6b1f3a52-0c1e-4d7a-9c3b-1a2b3c4d5e07", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false }
             ],
             "bindings": [
@@ -27,9 +27,9 @@
                 { "name": "", "id": "7c2a0001-0000-4000-8000-000000000021", "path": "<Gamepad>/buttonWest", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Shoot", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "7c2a0001-0000-4000-8000-000000000030", "path": "<Keyboard>/s", "interactions": "", "processors": "", "groups": "Keyboard", "action": "Start", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "7c2a0001-0000-4000-8000-000000000031", "path": "<Keyboard>/enter", "interactions": "", "processors": "", "groups": "Keyboard", "action": "Start", "isComposite": false, "isPartOfComposite": false },
-                { "name": "", "id": "7c2a0001-0000-4000-8000-000000000032", "path": "<Gamepad>/start", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Start", "isComposite": false, "isPartOfComposite": false },
-                { "name": "", "id": "7c2a0001-0000-4000-8000-000000000040", "path": "<Keyboard>/escape", "interactions": "", "processors": "", "groups": "Keyboard", "action": "Quit", "isComposite": false, "isPartOfComposite": false },
-                { "name": "", "id": "7c2a0001-0000-4000-8000-000000000041", "path": "<Gamepad>/select", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Quit", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "7c2a0001-0000-4000-8000-000000000040", "path": "<Keyboard>/escape", "interactions": "", "processors": "", "groups": "Keyboard", "action": "Pause", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "7c2a0001-0000-4000-8000-000000000041", "path": "<Gamepad>/start", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Pause", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "7c2a0001-0000-4000-8000-000000000042", "path": "<Keyboard>/p", "interactions": "", "processors": "", "groups": "Keyboard", "action": "Pause", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "7c2a0001-0000-4000-8000-000000000050", "path": "<Keyboard>/anyKey", "interactions": "", "processors": "", "groups": "Keyboard", "action": "AnyKey", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "7c2a0001-0000-4000-8000-000000000051", "path": "<Gamepad>/buttonSouth", "interactions": "", "processors": "", "groups": "Gamepad", "action": "AnyKey", "isComposite": false, "isPartOfComposite": false }
             ]

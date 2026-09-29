@@ -28,11 +28,15 @@ namespace Enemy.Waves {
             foreach (var ufoPrefab in ufoWave) {
                 var point = respawnPointsList[Random.Range(0, respawnPointsList.Count)];
                 Instantiate(ufoPrefab, point.transform.position, Quaternion.identity, aiWalls);
+                Core.GameEvents.RaiseUfoSpawned();
             }
         }
 
         public void SpawnAt(IReadOnlyList<GameObject> ufoWave, Vector3 position) {
-            foreach (var ufoPrefab in ufoWave) Instantiate(ufoPrefab, position, Quaternion.identity, aiWalls);
+            foreach (var ufoPrefab in ufoWave) {
+                Instantiate(ufoPrefab, position, Quaternion.identity, aiWalls);
+                Core.GameEvents.RaiseUfoSpawned();
+            }
         }
     }
 }

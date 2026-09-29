@@ -20,6 +20,13 @@ namespace ScriptableObjects.Scenes {
         [NonSerialized] public string LastPlayedLevel;
         [NonSerialized] public string CurrentScene;
         [NonSerialized] public int CurrentSceneIndex;
+        [Tooltip("Indeks etapu w CourseSO (-1 poza etapem)")]
+        [NonSerialized] public int CurrentStageIndex = -1;
+        [Tooltip("Ponowne wejście w etap po utracie życia (bez nowego punktu kontrolnego)")]
+        [NonSerialized] public bool Retrying;
+        [NonSerialized] public bool ContinuedAfterGameOver;
+        [Tooltip("Łączny czas przejazdu (s) – do rankingu")]
+        [NonSerialized] public int RunTime;
 
         public string MenuScene => menuScene;
         public string GameOverScene => gameOverScene;

@@ -22,6 +22,7 @@ namespace Projectiles.Player {
             // Wcześniej pocisk znikał na KAŻDYM triggerze (także na kołach własnego pojazdu i strefach fal).
             if (!other.TryGetComponent<IDestroyable>(out var target)) return;
             target.Destroyed();
+            Core.GameEvents.RaiseShotHit();
             Despawn();
         }
     }

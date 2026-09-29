@@ -15,16 +15,35 @@ namespace Core {
         /// <summary>Gracz zginął (wywoływane dokładnie raz na życie).</summary>
         public static event Action PlayerDied;
 
+        /// <summary>Statystyki etapu: UFO pojawiło się / zostało zestrzelone, gracz oddał strzał.</summary>
+        public static event Action UfoSpawned;
+        public static event Action UfoDestroyed;
+        public static event Action ShotFired;
+        public static event Action ShotHit;
+
+        /// <summary>Komunikat na środku HUD (tytuł, podtytuł, czas w sekundach).</summary>
+        public static event Action<string, string, float> Toast;
+
         public static void AwardScore(int points) {
             if (points != 0) ScoreAwarded?.Invoke(points);
         }
 
         public static void RaisePlayerDied() => PlayerDied?.Invoke();
+        public static void RaiseUfoSpawned() => UfoSpawned?.Invoke();
+        public static void RaiseUfoDestroyed() => UfoDestroyed?.Invoke();
+        public static void RaiseShotFired() => ShotFired?.Invoke();
+        public static void RaiseShotHit() => ShotHit?.Invoke();
+        public static void ShowToast(string title, string subtitle, float seconds = 1.7f) => Toast?.Invoke(title, subtitle, seconds);
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics() {
             ScoreAwarded = null;
             PlayerDied = null;
+            UfoSpawned = null;
+            UfoDestroyed = null;
+            ShotFired = null;
+            ShotHit = null;
+            Toast = null;
         }
     }
 }

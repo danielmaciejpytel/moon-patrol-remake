@@ -38,6 +38,7 @@ namespace Projectiles.Player {
         private void OnTriggerEnter2D(Collider2D other) {
             if (!other.TryGetComponent<IDestroyable>(out var target)) return;
             target.Destroyed();
+            Core.GameEvents.RaiseShotHit();
             Despawn();
         }
 
