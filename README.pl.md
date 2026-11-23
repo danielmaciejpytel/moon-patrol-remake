@@ -1,7 +1,7 @@
 <h1 align="center">Moon Patrol Remake</h1>
 
 <p align="center"><b>Dwuwymiarowa strzelanka z łazikiem księżycowym w Unity.</b><br>
-Studencki remake arcade'owej gry Moon Patrol z 1982 roku, stworzony w Game Dev School w 2021 roku i później zaktualizowany do Unity 6.</p>
+Studencki remake arcade'owej gry Moon Patrol z 1982 roku, stworzony w Game Dev School w 2021 roku i później rozbudowany do pełnej trasy A–Z w Unity 6.</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Unity-6-126a62?style=for-the-badge&labelColor=0b0d12" alt="Unity 6">
@@ -20,7 +20,7 @@ Studencki remake arcade'owej gry Moon Patrol z 1982 roku, stworzony w Game Dev S
   <a href="#zespół-i-autorstwo">Zespół i autorstwo</a>
 </p>
 
-Prowadź księżycowy łazik przez trzy etapy, przeskakuj kratery i skały, omijaj miny i strzelaj do UFO w dwóch kierunkach. Gra powstała jako projekt grupowy w Game Dev School i jest projektem edukacyjnym. To repozytorium kontynuuje ją jako projekt w Unity 6.
+Prowadź księżycowy łazik przez pięć etapów od A do Z, przeskakuj kratery i skały, omijaj miny i strzelaj do UFO w dwóch kierunkach. Gra powstała jako projekt grupowy w Game Dev School i jest projektem edukacyjnym. To repozytorium kontynuuje ją jako projekt w Unity 6 z dłuższą trasą, życiami, zapisem postępów i nowym menu.
 
 ## Szybki start
 
@@ -40,50 +40,46 @@ Oryginalny zespół z 2021 roku opublikował build WebGL swojej wersji (historyc
 
 <table>
   <tr>
-    <td align="center"><img src="Screenshots/mainmenu.png" alt="Menu główne z listą sterowania, napisami Press S to start i Press ESC to exit"><br><sub>Menu główne</sub></td>
+    <td align="center"><img src="Screenshots/mainmenu.png" alt="Menu główne wersji z 2021 roku z listą sterowania, napisami Press S to start i Press ESC to exit"><br><sub>Menu główne (2021)</sub></td>
     <td align="center"><img src="Screenshots/start.png" alt="Łazik opuszczający bazę startową na początku etapu"><br><sub>Początek etapu</sub></td>
     <td align="center"><img src="Screenshots/ufos.png" alt="Grupa UFO i zniszczony wróg nad księżycowym krajobrazem"><br><sub>Fala UFO</sub></td>
   </tr>
 </table>
 
-<sub>Zrzuty ekranu pochodzą z oryginalnej wersji z 2021 roku.</sub>
+<sub>Zrzuty ekranu pochodzą z oryginalnej wersji z 2021 roku; obecne menu i HUD wyglądają inaczej.</sub>
 
 ## Funkcje
 
-- **Trzy etapy** — trasa jest podzielona na etapy A–E, E–J i J–O. Litery checkpointów i pasek postępu w HUD pokazują, w którym miejscu jesteś.
-- **Podsumowania etapów** — każdy etap kończy się ekranem podsumowania. Są też ekrany końca gry i ukończenia gry.
-- **Strzał w dwóch kierunkach** — jeden strzał wystrzeliwuje pocisk do przodu i jeden w górę.
-- **Skoki** — łazik przeskakuje kratery, dziury i skały; przeskoczenie przeszkody daje punkty.
-- **Przeszkody** — duże i małe skały, dziury, dziury wymagające podwójnego skoku oraz miny.
-- **Fale UFO** — trzy rodzaje UFO atakują falami, używając bomb i rakiet.
-- **Wynik i czas** — HUD pokazuje wynik oraz czas etapu.
-- **Retro wygląd** — wielowarstwowe tło z paralaksą, shadery w stylu CRT, efekty dźwiękowe i muzyka.
+- **Pełna trasa A–Z** — pięć etapów (A–E, E–J, J–O, O–T, T–Z), każdy zakończony bossem i ekranem podsumowania, a na końcu trasy ekran z napisami końcowymi.
+- **Życia i punkty kontrolne** — trzy życia na etap. Śmierć cofa do punktu kontrolnego na początku etapu z wynikiem z tamtej chwili; po utracie ostatniego życia etap zaczyna się od nowa z wyzerowanym wynikiem.
+- **Zapis postępów** — punkt kontrolny dla opcji **Continue** oraz rekordy etapów są zapisywane między sesjami.
+- **Strzał w dwóch kierunkach i skoki** — jeden strzał wystrzeliwuje pocisk do przodu i jeden w górę; łazik przeskakuje kratery, dziury i skały, a przeskoczenie przeszkody daje punkty.
+- **Wrogowie i zagrożenia** — fale UFO z bombami i rakietami, czołg jadący za łazikiem, miny wysuwające się z ziemi, skały i dziury.
+- **Bonusy i combo** — UFO upuszczają podwójny strzał, tarczę i turbo; mnożnik combo nagradza kolejne trafienia.
+- **Garaż** — ulepszenia kupowane za kredyty.
+- **Najlepsze wyniki** — lokalna tabela z inicjałami oraz karta najlepszego przejazdu w menu.
+- **Menu, pauza i ustawienia** — Continue, New game, Settings i Quit; głośność muzyki i efektów, efekty CRT i rozlewania kolorów, drżenie ekranu oraz zmiana przypisania klawiszy.
+- **Retro wygląd** — wielowarstwowe tło z paralaksą i gwiaździstym niebem, shadery w stylu CRT, efekty dźwiękowe i muzyka.
 
 ## Sterowanie
 
-| Klawisz | Akcja |
-| --- | --- |
-| Strzałka w prawo | Przyspieszenie |
-| Strzałka w lewo | Zwolnienie |
-| Strzałka w górę | Skok |
-| Spacja | Strzał |
-| S | Start gry (menu) |
-| Esc | Wyjście |
+| Akcja | Klawiatura | Gamepad |
+| --- | --- | --- |
+| Przyspieszenie / zwolnienie | `→` / `←` lub `D` / `A` | Lewa gałka |
+| Skok | `↑` lub `W` | Dolny przycisk akcji |
+| Strzał | `Spacja` | Lewy przycisk akcji |
+| Start | `S` lub `Enter` | — |
+| Pauza | `Esc` lub `P` | Start |
+
+Przypisania klawiszy można zmienić w ustawieniach.
 
 ## Dla programistów
 
 - **Silnik:** Unity 6 (wersja w [`ProjectSettings/ProjectVersion.txt`](ProjectSettings/ProjectVersion.txt)), 2D, wbudowany potok renderowania (built-in), C#.
-- **Sceny:** menu, trzy etapy i ekrany podsumowań są w `Assets/Scenes/`. Są zarejestrowane w `ProjectSettings/EditorBuildSettings.asset`.
-- **Wejście:** gra odczytuje klawisze przez starszy Input Manager, a przypisania klawiszy są zapisane w ScriptableObject. Pakiet Input System 1.20.0 jest zainstalowany, a Active Input Handling ustawiono na Both.
-
-<details>
-<summary><b>Propozycja refaktoryzacji</b></summary>
-
-&nbsp;
-
-Folder [`Refactor/`](Refactor) leży poza `Assets/`, więc Unity go nie kompiluje. Zawiera analizę kodu po polsku, [`Refactor/ANALYSIS.md`](Refactor/ANALYSIS.md), oraz propozycję przerobionych skryptów (wejście oparte na Input System, zdarzenia zamiast `GameObject.Find`, pula obiektów, poprawki wymienionych błędów). Według analizy przerobione skrypty się kompilują, ale gra nie była uruchamiana z nowym kodem, a sceny i prefaby wymagałyby wcześniej migracji. Gra w `Assets/` nadal używa oryginalnych skryptów.
-
-</details>
+- **Sceny:** menu, pięć etapów i ekrany podsumowań są w `Assets/Scenes/`. Są zarejestrowane w `ProjectSettings/EditorBuildSettings.asset`.
+- **Wejście i interfejs:** gra korzysta wyłącznie z pakietu Input System; akcje są zdefiniowane w [`Assets/Input/MoonPatrolControls.inputactions`](Assets/Input/MoonPatrolControls.inputactions). Teksty używają TextMeshPro.
+- **Zapisy:** ustawienia i postępy są przechowywane w formacie JSON.
+- **Notatki z refaktoryzacji:** folder [`Refactor/`](Refactor) zawiera analizę kodu po polsku, [`Refactor/ANALYSIS.md`](Refactor/ANALYSIS.md), oraz pierwotną propozycję refaktoryzacji. Przerobione skrypty zostały później włączone do `Assets/Scripts`.
 
 ## Zespół i autorstwo
 
@@ -95,7 +91,7 @@ Projekt powstał w latach 2020–2021 w zespole 5 Game Dev School. Role według 
 
 Repozytorium oryginalnego zespołu to [Patryk-Rozwadowski/Moon-Patrol-Remake](https://github.com/Patryk-Rozwadowski/Moon-Patrol-Remake).
 
-**Kontynuacja w tym repozytorium.** Daniel Pytel zaktualizował silnik w 2025 roku, a następnie przeniósł projekt na Unity 6, dodał pakiet Input System oraz przygotował analizę kodu i propozycję refaktoryzacji w `Refactor/` (commity z 2026-09-28).
+**Kontynuacja w tym repozytorium.** Całą późniejszą pracę wykonał Daniel Pytel: aktualizacje silnika w 2025 roku, a w 2026 roku przejście na Unity 6, Input System i TextMeshPro, analizę kodu i wdrożoną refaktoryzację, nowe menu, pauzę, ustawienia i HUD, życia, punkty kontrolne i zapis postępów oraz rozbudowę do pełnej trasy A–Z z bossami, bonusami, garażem i tabelą wyników.
 
 **Dźwięk i czcionki.** Efekty dźwiękowe i muzyka są w [`Assets/Sounds`](Assets/Sounds); repozytorium nie dokumentuje ich autorów, źródeł ani licencji. TextMesh Pro zawiera czcionkę Liberation Sans na licencji SIL Open Font License ([`Assets/TextMesh Pro/Fonts/LiberationSans - OFL.txt`](<Assets/TextMesh Pro/Fonts/LiberationSans - OFL.txt>)).
 
